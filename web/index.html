@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node data</title>
+    <link rel="stylesheet" href="styles.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <style>
+        #map {
+            height: 800px
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="userDetails" style="left: 40%; top:10%; visibility: hidden; position: absolute;">
+        Enter phone number: <input type="text" id="phone" width="200"/>
+        <button id="submitButton">GO</button>
+        <h2 id="welcome"></h2>
+        <div id="dates" style="visibility: hidden;">
+        Booking from: <input type="date" id="from"/><br>
+        Booking to: <input type="date" id="to"/>
+        <button id="submitBooking">Book</button>
+        </div>
+        <div id="newcustomer" style="visibility: hidden;">
+            <h4>This is your first booking, please enter your details: </h4>
+            Enter first name:<input type="text" width="200" id="fname"><br>
+            Enter last name:<input type="text" width="200" id="lname"><br>
+            Enter email id(optional):<input type="text" width="200" id="email"><br>
+            <button id="newUserSub">Submit</button>
+        </div>
+    </div>
+    
+    <script src = "app.js"></script>
+</body>
+
+</html>

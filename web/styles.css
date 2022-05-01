@@ -1,0 +1,25 @@
+button{
+    background-color: azure;
+    border-radius: .5;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+input{
+    border-radius: .5%;
+}
+
+body{
+    font-family: monospace;
+    font-size: x-large;
+}
+
+h4{
+    text-decoration: underline;
+}
+
+body{
+    background-color: rgba(189, 236, 217, 0.836);
+}
+
+table, th, td {
+    border: 1px solid black;
+}
