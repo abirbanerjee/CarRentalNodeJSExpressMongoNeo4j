@@ -101,12 +101,7 @@ for(let i=0;i<carDetails.length;i++){
     await session.close();
 }
 
-    console.log(carDetails);
-
-    res.send(carDetails);
-
-
-
+        res.send(carDetails);
 })
 
 app.listen(3000);
