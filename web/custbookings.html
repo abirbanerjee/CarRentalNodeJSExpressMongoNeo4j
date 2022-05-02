@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css"/>
+    <title>Bookings</title>
+</head>
+
+<body>
+    <div id="userDetails" style="left: 30%; top:10%; position: absolute;">
+        Enter phone number: <input type="text" id="phone" width="200" />
+        <button id="submitButton">GO</button>
+        <h2 id="welcome"></h2>
+    </div>
+    <script>
+        const goButton = document.getElementById('submitButton');
+        
+        const userDetailsDiv = document.querySelector('#userDetails');
+        goButton.addEventListener('click', fetchCustomer);
+        async function fetchCustomer() {
+            goButton.disabled = true;  
+            const userPhone = document.querySelector('#phone').value;
+            const phone = { userPhone };
+            const options = {
+                method: 'POST',
+                headers: {
+                    "Content-type": "Application/json"
+                },
+                body: JSON.stringify(phone)
+            }
+            const response = await fetch('/fetchuser', options);
+            const userDetails = await response.json();
+            console.log(userDetails.userDetails);
+            if (userDetails.userDetails === 'NEW') {
+                const newUserMessage = document.createElement('h5');
+                newUserMessage.innerHTML = `Phone number is not registerd with us. Please go to the <a href = "http://localhost:3000">homepage</a> to book your first car.`
+                userDetailsDiv.append(newUserMessage);
+            }
+            else {
+                const welcomeMessage = document.querySelector('#welcome');
+                welcomeMessage.innerHTML = 'Welcome Mr. ' + userDetails.userDetails.first_name + ' ' + userDetails.userDetails.last_name;
+                custBookings(userPhone);
+                newUserMessage.innerHTML = `Go to the <a href = "http://localhost:3000">homepage</a>.`
+                userDetailsDiv.append(newUserMessage);
+            }
+        }
+        async function custBookings(userPhone) {
+            const phone = { userPhone };
+            const options = {
+                method: 'POST',
+                headers: {
+                    "Content-type": "Application/json"
+                },
+                body: JSON.stringify(phone)
+            };
+            const resp = await fetch('/custbookings', options);
+            const bookings = await resp.json();
+            //console.log(bookings);
+            if (bookings != null) {
+                const text = document.createElement('h4');
+                text.innerText = 'Your bookings:';
+                document.getElementById('userDetails').append(text);
+
+            }
+            bookings.forEach(booking => {
+                const detailsDiv = document.createElement('div');
+                const details = document.createElement('span');
+                details.innerText = `Booked on: ${booking.timestamp} Car: ${booking.Car[0].color} ${booking.Car[0].car_make} ${booking.Car[0].car_model}`
+                const delButton = document.createElement('button');
+                delButton.innerHTML = "Delete";
+                delButton.setAttribute('bookid', `${booking._id}`)
+                delButton.addEventListener('click', async (e) => {
+                    e.target.innerHTML = 'Deleted';
+                    e.target.disabled = true;
+
+                    const bookid = e.target.getAttribute('bookid');
+                    const data = { bookid };
+                    const options = {
+                        method: 'POST',
+                        headers: {
+                            "Content-type": "Application/json"
+                        },
+                        body: JSON.stringify(data)
+                    };
+                    await fetch('/delbooking', options);
+                })
+                detailsDiv.append(details);
+                detailsDiv.append(delButton);
+                document.getElementById('userDetails').append(detailsDiv);
+            })
+        }
+    </script>
+</body>
+
+</html>
