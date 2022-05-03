@@ -21,23 +21,32 @@
 </head>
 
 <body>
-    <h6>Move the marker on the map to desired location to see nearby cars<br><a href="custbookings.html">Click here</a> to see your bookings.</h6>
+    <span>Move the marker on the map to desired location to see nearby cars<br><a href="custbookings.html">Click here</a> to see your bookings.</span>
+    <!-- Filter by: <select id ='make'>Car make</select>        <select id="color">Color</select>      <select id="year">Year</select> -->
     <div id="map"></div>
     <div id="userDetails" style="left: 30%; top:10%; visibility: hidden; position: absolute;">
-        Enter phone number: <input type="text" id="phone" width="200"/>
+        <label>Enter phone number:</label> <input type="text" id="phone" width="200"/>
         <button id="submitButton">GO</button>
         <h2 id="welcome"></h2>
+        <h3 id="selectedCar"></h3>
         <div id="dates" style="visibility: hidden;">
-        Booking from: <input type="date" id="from"/><br>
-        Booking to: <input type="date" id="to"/>
-        <button id="submitBooking">Book</button>
+        <label>Booking from:</label>  <input type="date" id="from"/><br>
+        <label>Booking to:</label> <input type="date" id="to"/><br><br><br>
+        <span id ='totalPrice'></span>
+        <br><br>
+        <div id="proceedBooking" style="visibility: hidden;">
+        <span>Proceed with</span><button id="submitBooking">Booking?</button>
+        </div>
         </div>
         <div id="newcustomer" style="visibility: hidden;">
             <h4>This is your first booking, please enter your details: </h4>
-            Enter first name:<input type="text" width="200" id="fname"><br>
-            Enter last name:<input type="text" width="200" id="lname"><br>
-            Enter email id(optional):<input type="text" width="200" id="email"><br>
+            <label>Enter first name:</label><input type="text" width="200" id="fname"><br>
+            <label>Enter last name:</label><input type="text" width="200" id="lname"><br>
+            <label>Enter email id(optional):</label> <input type="text" width="200" id="email"><br>
             <button id="newUserSub">Submit</button>
+        </div>
+        <div id="prevBookings" style="visibility: hidden;">
+            <h4>Your bookings:</h4>
         </div>
     </div>
     

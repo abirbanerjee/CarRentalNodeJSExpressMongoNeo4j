@@ -23,3 +23,15 @@ body{
 table, th, td {
     border: 1px solid black;
 }
+
+label{
+    display: block;
+    float: left;
+    clear: left;
+    width: 250px;
+    text-align: right;
+}
+input {
+  display: block;
+  float: left;
+}

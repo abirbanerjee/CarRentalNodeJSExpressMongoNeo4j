@@ -104,4 +104,12 @@ for(let i=0;i<carDetails.length;i++){
         res.send(carDetails);
 })
 
+app.post('/update',async (req,res)=>{
+    console.log(req.body);
+    const result = await MongoFunctions.updateCustomer(req.body.newFname, req.body.newLname, req.body.newEmail, req.body.newPhone, req.body.userPhone);
+    console.log(result);
+    res.send(result);
+    
+})
+
 app.listen(3000);

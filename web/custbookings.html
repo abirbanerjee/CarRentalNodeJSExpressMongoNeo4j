@@ -5,23 +5,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css"/>
+    <link rel="stylesheet" href="styles.css" />
     <title>Bookings</title>
 </head>
 
 <body>
     <div id="userDetails" style="left: 30%; top:10%; position: absolute;">
-        Enter phone number: <input type="text" id="phone" width="200" />
+        <label>Enter phone number:</label> <input type="text" id="phone" width="200" />
+        <h5 id="backhome"></h5><br>
+        <h5 id="modify"></h5>
         <button id="submitButton">GO</button>
         <h2 id="welcome"></h2>
     </div>
+    <div id="changeDetails" style="visibility: hidden; left: 30%; top: 20%; position: absolute;">
+        <label>First name:</label><input type="text" id="fname" />
+        <label>Last name:</label><input type="text" id="lname" />
+        <label>Email:</label><input type="text" id="email" />
+        <label>Phone:</label><input type="text" id="phoneUpd" />
+        <br> <br> <br> <br>
+        <button id="updateUserDetails">Submit changes</button>
+    </div>
+    <div id="bookings">
+        <h4 id="yourBooking"></h4>
+    </div>
     <script>
         const goButton = document.getElementById('submitButton');
-        
+        const updateSubmit = document.querySelector('#updateUserDetails');
+
         const userDetailsDiv = document.querySelector('#userDetails');
         goButton.addEventListener('click', fetchCustomer);
         async function fetchCustomer() {
-            goButton.disabled = true;  
+            goButton.disabled = true;
             const userPhone = document.querySelector('#phone').value;
             const phone = { userPhone };
             const options = {
@@ -41,16 +55,48 @@
             }
             else {
                 const welcomeMessage = document.querySelector('#welcome');
-                const backHomeMessage = document.createElement('h5');
-                const modifyMessage = document.createElement('h5');
+                const backHomeMessage = document.querySelector('#backhome');
+                const modifyMessage = document.querySelector('#modify');
                 welcomeMessage.innerHTML = 'Welcome Mr. ' + userDetails.userDetails.first_name + ' ' + userDetails.userDetails.last_name;
                 custBookings(userPhone);
                 modifyMessage.innerHTML = `<a href='#' id='modify'>Click here</a> to change your details.`
                 backHomeMessage.innerHTML = `Go to the <a href = "http://localhost:3000">homepage</a>.`
                 userDetailsDiv.append(modifyMessage);
                 userDetailsDiv.append(backHomeMessage);
-                document.getElementById('modify').addEventListener('click',()=>{
-                    console.log('Modify code here.');
+                document.getElementById('modify').addEventListener('click', async () => {
+                    modifyMessage.style.visibility = 'hidden';
+                    backHomeMessage.style.visibility = 'hidden';
+                    document.querySelector('#changeDetails').style.visibility = 'visible';
+                    const fname = document.querySelector('#fname');
+                    const lname = document.querySelector('#lname');
+                    const email = document.querySelector('#email');
+                    const phone = document.querySelector('#phoneUpd');
+                    fname.value = userDetails.userDetails.first_name;
+                    lname.value = userDetails.userDetails.last_name;
+                    email.value = userDetails.userDetails.email;
+                    phone.value = userDetails.userDetails.phone;
+                    updateSubmit.addEventListener('click', async() => {
+                        let newFname = fname.value;
+                        let newLname = lname.value;
+                        let newEmail = email.value;
+                        let newPhone = phone.value;
+                        const updateData = { newFname, newLname, newEmail, newPhone, userPhone };
+                        const options = {
+                            method: 'POST',
+                            headers: {
+                                "Content-type": "Application/json"
+                            },
+                            body: JSON.stringify(updateData)
+                        };
+                        let respUpd = await fetch('/update', options);
+                        let resultUpd = await respUpd.json();
+                        console.log(resultUpd);
+                        document.querySelector('#phone').value =phone.value;
+                        modifyMessage.style.visibility = 'visible';
+                        backHomeMessage.style.visibility = 'visible';
+                        document.querySelector('#changeDetails').style.visibility = 'hidden';
+                        fetchCustomer()
+                    })
                 })
             }
         }
@@ -66,11 +112,9 @@
             const resp = await fetch('/custbookings', options);
             const bookings = await resp.json();
             //console.log(bookings);
-            if (bookings != null) {
-                const text = document.createElement('h4');
+            if (bookings.length != 0) {
+                const text = document.querySelector('#yourBooking')
                 text.innerText = 'Your bookings:';
-                document.getElementById('userDetails').append(text);
-
             }
             bookings.forEach(booking => {
                 const detailsDiv = document.createElement('div');
@@ -96,7 +140,7 @@
                 })
                 detailsDiv.append(details);
                 detailsDiv.append(delButton);
-                document.getElementById('userDetails').append(detailsDiv);
+                document.getElementById('bookings').append(detailsDiv);
             })
         }
     </script>

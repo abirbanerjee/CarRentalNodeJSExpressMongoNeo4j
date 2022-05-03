@@ -1,6 +1,10 @@
 let resp,userPhone,carID, carLat, carLon;
 let lat, lon;
 let marker=[];
+// let carMakeSelect = document.getElementById('make');
+// let carColorSelect = document.getElementById('color');
+// let carYearSelect = document.getElementById('year');
+
 document.querySelector('#submitButton').addEventListener('click',fetchCustomer);
 
 //setup leaflet
@@ -20,6 +24,9 @@ function delMarkers(){
 });
 }
 
+// function clearOptions(){
+//         carMakeSelect.innerText = '';
+// }
 
 //Get nearby cars from neo4j and place it on map.
 async function responseProcess(lat,lon) {
@@ -40,7 +47,15 @@ async function responseProcess(lat,lon) {
     console.log(totCars);
     totCars.forEach(async (element, index) => {
         const cd = await carDet(index);
-
+        // const makeOption = document.createElement('option');
+        // makeOption.text = cd.carDetails[0].car_make;
+        // carMakeSelect.append(makeOption);
+        // const colorOption = document.createElement('option');
+        // colorOption.text = cd.carDetails[0].color;
+        // carColorSelect.append(colorOption);
+        // const yearOption = document.createElement('option');
+        // yearOption.text = cd.carDetails[0].year;
+        // carYearSelect.append(yearOption);
         lon = parseFloat(element._fields[0].x);
         lat = parseFloat(element._fields[0].y);  
         if(cd.carDetails[0].status!=0){         
@@ -53,7 +68,6 @@ async function responseProcess(lat,lon) {
         (`${cd.carDetails[0].color} ${cd.carDetails[0].car_make} ${cd.carDetails[0].car_model}<br> 
         Rent/day:€${cd.carDetails[0].price}<br>Distance: ${parseFloat(element._fields[1].toFixed(2))} KMs<br><img src=${cd.carDetails[0].photo}/>`)
         marker.on('click', (e) => console.log(e.target));
-        
         marker.on('dblclick', async (e) => {
             //Proceed with booking
             carLat = e.target._latlng.lat;
@@ -93,7 +107,8 @@ function userLoc() {
         lon = position.coords.longitude;
         map.flyTo([lat,lon],7, 'zoom');
         L.marker([lat, lon], { name:'home', icon: myIcon, draggable:true }).on('dragend',async (e)=>{
-        delMarkers();   
+        delMarkers();
+        //clearOptions();
         responseProcess(e.target._latlng.lat, e.target._latlng.lng);
     }).on('click', (e)=>console.log(e)).addTo(map).bindPopup('Your location');
         responseProcess(lat,lon);
@@ -149,7 +164,15 @@ async function fetchCustomer(){
     {
     custBookings(userPhone);
     const welcomeMessage = document.querySelector('#welcome');
-    welcomeMessage.innerHTML = 'Welcome Mr. ' + userDetails.userDetails.first_name + ' '+userDetails.userDetails.last_name;
+    welcomeMessage.innerHTML = 'Welcome Mr. ' + userDetails.userDetails.first_name +' '+userDetails.userDetails.last_name;
+    const selectedCar = document.querySelector('#selectedCar');
+    const carDets = await carDet(carID);
+    selectedCar.innerHTML = `You selected the ${carDets.carDetails[0].color} ${carDets.carDetails[0].car_make} ${carDets.carDetails[0].car_model} (${carDets.carDetails[0].year}) 
+    for €${carDets.carDetails[0].price}/day`;
+    document.querySelector('#to').addEventListener('change', ()=>{
+        bookedDays(carDets.carDetails[0].price);
+    })
+    
     document.querySelector('#dates').style.visibility='visible';
     document.querySelector('#submitBooking').addEventListener('click',async ()=>{
         document.querySelector('#submitBooking').disabled = true;
@@ -193,12 +216,10 @@ async function custBookings(userPhone){
     };
     const resp = await fetch('/custbookings',options);
     const bookings = await resp.json();
-    //console.log(bookings);
-    if(bookings!=null)
+    // console.log(bookings);
+    if(bookings.length!=0)
     {
-        const text = document.createElement('h4');
-        text.innerText = 'Your bookings:';
-        document.getElementById('userDetails').append(text);
+        document.getElementById('prevBookings').style.visibility = 'visible';
         
     }
     bookings.forEach(booking=>{
@@ -225,7 +246,22 @@ async function custBookings(userPhone){
     })
         detailsDiv.append(details);
         detailsDiv.append(delButton);
-        document.getElementById('userDetails').append(detailsDiv);
+        document.getElementById('prevBookings').append(detailsDiv);
     })
 }
 
+function bookedDays(pricePerDay){
+    let from = document.querySelector('#from').value;
+    let to = document.querySelector('#to').value;
+    let d1 = new Date(from);
+    let d2 = new Date(to);
+
+    let noOfDays = (d2-d1)/(24*3600*1000);
+    if(noOfDays ===0)
+     noOfDays = 1;
+    const totalPrice = noOfDays*pricePerDay;
+    console.log(totalPrice);
+    document.getElementById('proceedBooking').style.visibility = 'visible';
+    document.getElementById('totalPrice').innerText = `Total price to be paid: €${totalPrice}`;
+
+}

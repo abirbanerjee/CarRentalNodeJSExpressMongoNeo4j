@@ -79,16 +79,16 @@ srchBooking: async(phone)=>{
     return aggregatedList; 
 },
 
-updateCustomer : async(toModify, phoneNo, newData)=>{
+updateCustomer : async(fname, lname, email, phone, oldphone)=>{
     const client = new MongoClient(mongoURI);
     await client.connect();
     const db = client.db('car_rental');
     const custColl = db.collection('customers');
-    let update = {};
-    update[toModify]=newData;
-    await custColl.updateOne({phone:phoneNo},{$set:update});
+    console.log(fname,lname, email, phone, oldphone);
+    const res = await custColl.updateOne({phone:oldphone},{$set:{first_name:fname, last_name:lname, email:email, phone:phone}});
     client.close();
-    return;
+    console.log(res);
+    return res;
 },
 
 deleteBooking: async (bookid)=>{
