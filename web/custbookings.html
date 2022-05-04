@@ -152,9 +152,9 @@
                 viewButton.setAttribute('bookid', `${booking._id}`);
                 viewButton.addEventListener('click',async ()=>{
                     console.log(booking);
-                    let detailsWindow = window.open('','detailsWindow', 'width=550, height=600');
-                    // detailsWindow.document.write(booking.lat, booking.lon, booking.pickup_code);
-                    detailsWindow.document.write(`<h3>Your pickup code is:${booking.pickup_code}. Your car pickup location:</h3>`);
+                    let detailsWindow = window.open('','detailsWindow', 'width=800, height=650 resizable=0');
+                    detailsWindow.document.write(`<head><link rel="stylesheet" href="styles.css"/></head>`);
+                    detailsWindow.document.write(`<h4>Booked car licence plate is: ${booking.Car[0].licence_plate}. Your pickup code is:${booking.pickup_code}.<br> Your car pickup location:</h4>`);
                     detailsWindow.document.write(`<iframe width="500" height="350" style="border:0" loading="lazy" allowfullscreen 
         src="https://www.google.com/maps/embed/v1/search?q=${booking.lat}%2C${booking.lon}&key=AIzaSyDDW_15VmvhkfdDWLYrPGvjvOJ9B8VIjeg">
         </iframe>`);

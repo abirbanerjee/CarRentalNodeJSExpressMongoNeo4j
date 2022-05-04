@@ -24,11 +24,6 @@ function delMarkers(){
 });
 }
 
-// function clearOptions(){
-//         carMakeSelect.innerText = '';
-// }
-
-//Get nearby cars from neo4j and place it on map.
 async function responseProcess(lat,lon) {
     const latlon = {};
     latlon.lat =lat;
@@ -47,15 +42,6 @@ async function responseProcess(lat,lon) {
     console.log(totCars);
     totCars.forEach(async (element, index) => {
         const cd = await carDet(index);
-        // const makeOption = document.createElement('option');
-        // makeOption.text = cd.carDetails[0].car_make;
-        // carMakeSelect.append(makeOption);
-        // const colorOption = document.createElement('option');
-        // colorOption.text = cd.carDetails[0].color;
-        // carColorSelect.append(colorOption);
-        // const yearOption = document.createElement('option');
-        // yearOption.text = cd.carDetails[0].year;
-        // carYearSelect.append(yearOption);
         lon = parseFloat(element._fields[0].x);
         lat = parseFloat(element._fields[0].y);  
         if(cd.carDetails[0].status!=0){         

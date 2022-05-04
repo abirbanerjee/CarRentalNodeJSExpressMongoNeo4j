@@ -5,6 +5,8 @@ button{
 }
 input{
     border-radius: .5%;
+    font-family: monospace;
+    font-size: large;
 }
 
 body{
