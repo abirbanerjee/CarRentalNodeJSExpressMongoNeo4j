@@ -12,10 +12,10 @@
 <body>
     <div id="userDetails" style="left: 30%; top:10%; position: absolute;">
         <label>Enter phone number:</label> <input type="text" id="phone" width="200" />
-        <h5 id="backhome"></h5><br>
-        <h5 id="modify"></h5>
         <button id="submitButton">GO</button>
         <h2 id="welcome"></h2>
+        <h5 id="backhome"></h5><br>
+        <h5 id="modify"></h5>
     </div>
     <div id="changeDetails" style="visibility: hidden; left: 30%; top: 20%; position: absolute;">
         <label>First name:</label><input type="text" id="fname" />
@@ -23,9 +23,9 @@
         <label>Email:</label><input type="text" id="email" />
         <label>Phone:</label><input type="text" id="phoneUpd" />
         <br> <br> <br> <br>
-        <button id="updateUserDetails">Submit changes</button>
+        <button id="updateUserDetails">Submit changes</button> <button id = 'cancel'>Cancel</button>
     </div>
-    <div id="bookings">
+    <div id="bookings" style="position: absolute; left: 30%; top:35%">
         <h4 id="yourBooking"></h4>
     </div>
     <script>
@@ -35,6 +35,9 @@
         const userDetailsDiv = document.querySelector('#userDetails');
         goButton.addEventListener('click', fetchCustomer);
         async function fetchCustomer() {
+            // window.open("https://www.w3schools.com", "_blank", "toolbar=yes,scrollbars=yes,resizable=no,top=500,left=500,width=400,height=400");
+            // var myWindow = window.open("", "MsgWindow", "scrollbars=yes,resizable=no,width=200,height=100");
+            // myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
             goButton.disabled = true;
             const userPhone = document.querySelector('#phone').value;
             const phone = { userPhone };
@@ -97,6 +100,11 @@
                         document.querySelector('#changeDetails').style.visibility = 'hidden';
                         fetchCustomer()
                     })
+                    document.getElementById('cancel').addEventListener('click', ()=>{
+                        modifyMessage.style.visibility = 'visible';
+                        backHomeMessage.style.visibility = 'visible';
+                        document.querySelector('#changeDetails').style.visibility = 'hidden';
+                    })
                 })
             }
         }
@@ -111,12 +119,13 @@
             };
             const resp = await fetch('/custbookings', options);
             const bookings = await resp.json();
-            //console.log(bookings);
+            // console.log(bookings);
             if (bookings.length != 0) {
                 const text = document.querySelector('#yourBooking')
                 text.innerText = 'Your bookings:';
             }
             bookings.forEach(booking => {
+                console.log(booking);
                 const detailsDiv = document.createElement('div');
                 const details = document.createElement('span');
                 details.innerText = `Booked on: ${booking.timestamp} Car: ${booking.Car[0].color} ${booking.Car[0].car_make} ${booking.Car[0].car_model}`
@@ -138,8 +147,21 @@
                     };
                     await fetch('/delbooking', options);
                 })
+                const viewButton = document.createElement('button');
+                viewButton.innerHTML = 'View';
+                viewButton.setAttribute('bookid', `${booking._id}`);
+                viewButton.addEventListener('click',async ()=>{
+                    console.log(booking);
+                    let detailsWindow = window.open('','detailsWindow', 'width=550, height=600');
+                    // detailsWindow.document.write(booking.lat, booking.lon, booking.pickup_code);
+                    detailsWindow.document.write(`<h3>Your pickup code is:${booking.pickup_code}. Your car pickup location:</h3>`);
+                    detailsWindow.document.write(`<iframe width="500" height="350" style="border:0" loading="lazy" allowfullscreen 
+        src="https://www.google.com/maps/embed/v1/search?q=${booking.lat}%2C${booking.lon}&key=AIzaSyDDW_15VmvhkfdDWLYrPGvjvOJ9B8VIjeg">
+        </iframe>`);
+                })
                 detailsDiv.append(details);
                 detailsDiv.append(delButton);
+                detailsDiv.append(viewButton);
                 document.getElementById('bookings').append(detailsDiv);
             })
         }

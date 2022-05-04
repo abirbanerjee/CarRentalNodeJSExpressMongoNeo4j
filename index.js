@@ -59,18 +59,26 @@ app.post('/newbooking', async(req,res)=>{
     const car_id = req.body.carID;
     const from = req.body.from;
     const to = req.body.to;
-    const status = await MongoFunctions.newBooking(car_id,phone,from,to);
+    const pickupCode = req.body.carPickupCode;
+    const status = await MongoFunctions.newBooking(car_id,phone,from,to, pickupCode);
     res.send(status);
 })
 
 app.post('/custbookings', async(req,res)=>{
     const phone = req.body.userPhone;
-    const bookings = await MongoFunctions.srchBooking(phone);
-    bookings.forEach(booking=>{
-        const stamp =(booking._id).getTimestamp();
-        booking.timestamp = stamp;
-    })
+    let resBooking =[];
+    let bookings = await MongoFunctions.srchBooking(phone);
+    for(let i=0;i<bookings.length;i++){
+        const stamp =(bookings[i]._id).getTimestamp();
+        bookings[i].timestamp = stamp;
+        const session = driver.session();
+        const ses = await session.run(`MATCH (p:Car{car_id:'${bookings[0].Car[0].id}'}) RETURN p`);
+        bookings[i].lat= await ses.records[0]._fields[0].properties.lat;
+        bookings[i].lon=await ses.records[0]._fields[0].properties.lon;
+    }
     res.send(bookings);
+
+
 })
 
 app.post('/delbooking', async (req,res)=>{
@@ -92,7 +100,7 @@ app.get('/allcars',async (req,res)=>{
 
 for(let i=0;i<carDetails.length;i++){
     const car_id = carDetails[i].id;
-        const session = driver.session();
+    const session = driver.session();
     const ses = await session.run(`MATCH (p:Car{car_id:'${car_id}'}) RETURN p`);
     delete carDetails[i]._id;
     delete carDetails[i].photo;
@@ -111,5 +119,6 @@ app.post('/update',async (req,res)=>{
     res.send(result);
     
 })
+
 
 app.listen(3000);

@@ -48,7 +48,7 @@ newCust: async(userDetails, phoneNo)=>{
     return reply;
 },
 
-newBooking: async (carId,custPhone, from, to)=>{
+newBooking: async (carId,custPhone, from, to, pickupCode)=>{
     const client = new MongoClient(mongoURI);
     await client.connect();
     const db = client.db('car_rental');
@@ -57,7 +57,7 @@ newBooking: async (carId,custPhone, from, to)=>{
     const custColl = db.collection('customers');
     const customer = (await custColl.findOne({$or: [{phone:custPhone},{email:custPhone}]}))._id;
     const bookingCollection = db.collection('bookings');
-    await bookingCollection.insertOne({cust_id:customer, car_id:car, from:from, to:to});
+    await bookingCollection.insertOne({cust_id:customer, car_id:car, from:from, to:to, pickup_code:pickupCode});
     await carsColl.updateOne({id:carId},{$set: {status:0}});
     client.close();
     
@@ -65,7 +65,7 @@ newBooking: async (carId,custPhone, from, to)=>{
 
 srchBooking: async(phone)=>{
     // let bookigDetails={};
-    const projection = {Customer:1, Car:1, from:1, to:1, _id:1};
+    const projection = {Customer:1, Car:1, from:1, to:1, _id:1, pickup_code:1};
     const client = new MongoClient(mongoURI);
     await client.connect();
     const db = client.db('car_rental');

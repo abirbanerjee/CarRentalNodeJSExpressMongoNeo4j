@@ -178,7 +178,8 @@ async function fetchCustomer(){
         document.querySelector('#submitBooking').disabled = true;
         const from = document.querySelector('#from').value;
         const to = document.querySelector('#to').value;
-        const bookingData={carID,userPhone, from, to};
+        const carPickupCode = Math.floor((Math.random()*9000)+1000);
+        const bookingData={carID,userPhone, from, to, carPickupCode};
         const options = {
             method: 'POST',
             headers: {
@@ -192,9 +193,9 @@ async function fetchCustomer(){
 
         const bookedCar = document.createElement('div');
         const text = document.createElement('h4');
-        text.innerText = "Your car location:";
+        text.innerText = `Licence plate of the booked car is: ${carDets.carDetails[0].licence_plate}. Your unique pickup code is:${carPickupCode}. Your car location:`;
         bookedCar.innerHTML = 
-        `<iframe width="600" height="450" style="border:0" loading="lazy" allowfullscreen 
+        `<iframe width="500" height="350" style="border:0" loading="lazy" allowfullscreen 
         src="https://www.google.com/maps/embed/v1/search?q=${carLat}%2C${carLon}&key=AIzaSyDDW_15VmvhkfdDWLYrPGvjvOJ9B8VIjeg">
         </iframe>`
         document.querySelector('#userDetails').append(text);
