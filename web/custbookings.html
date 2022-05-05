@@ -35,9 +35,6 @@
         const userDetailsDiv = document.querySelector('#userDetails');
         goButton.addEventListener('click', fetchCustomer);
         async function fetchCustomer() {
-            // window.open("https://www.w3schools.com", "_blank", "toolbar=yes,scrollbars=yes,resizable=no,top=500,left=500,width=400,height=400");
-            // var myWindow = window.open("", "MsgWindow", "scrollbars=yes,resizable=no,width=200,height=100");
-            // myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
             goButton.disabled = true;
             const userPhone = document.querySelector('#phone').value;
             const phone = { userPhone };
@@ -98,7 +95,7 @@
                         modifyMessage.style.visibility = 'visible';
                         backHomeMessage.style.visibility = 'visible';
                         document.querySelector('#changeDetails').style.visibility = 'hidden';
-                        fetchCustomer()
+                        fetchCustomer();
                     })
                     document.getElementById('cancel').addEventListener('click', ()=>{
                         modifyMessage.style.visibility = 'visible';
