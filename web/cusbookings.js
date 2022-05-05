@@ -16,7 +16,6 @@ const goButton = document.getElementById('submitButton');
             }
             const response = await fetch('/fetchuser', options);
             const userDetails = await response.json();
-            console.log(userDetails.userDetails);
             if (userDetails.userDetails === 'NEW') {
                 const newUserMessage = document.createElement('h5');
                 newUserMessage.innerHTML = `Phone number is not registerd with us. Please go to the <a href = "http://localhost:3000">homepage</a> to book your first car.`
