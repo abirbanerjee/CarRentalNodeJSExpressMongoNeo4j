@@ -18,6 +18,7 @@ module.exports = {
     filter={'id':car_id};
     const db = client.db('car_rental');
     const carsColl = db.collection('cars');
+    const bookingCollection = db.collection('bookings');
     const carDetails = await carsColl.find(filter).toArray();
     client.close();
     return carDetails;       
