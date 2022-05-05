@@ -72,7 +72,7 @@ app.post('/custbookings', async(req,res)=>{
         const stamp =(bookings[i]._id).getTimestamp();
         bookings[i].timestamp = stamp;
         const session = driver.session();
-        const ses = await session.run(`MATCH (p:Car{car_id:'${bookings[0].Car[0].id}'}) RETURN p`);
+        const ses = await session.run(`MATCH (p:Car{car_id:'${bookings[i].Car[0].id}'}) RETURN p`);
         bookings[i].lat= await ses.records[0]._fields[0].properties.lat;
         bookings[i].lon=await ses.records[0]._fields[0].properties.lon;
     }

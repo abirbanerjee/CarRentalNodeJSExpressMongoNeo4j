@@ -122,7 +122,6 @@
                 text.innerText = 'Your bookings:';
             }
             bookings.forEach(booking => {
-                console.log(booking);
                 const detailsDiv = document.createElement('div');
                 const details = document.createElement('span');
                 details.innerText = `Booked on: ${booking.timestamp} Car: ${booking.Car[0].color} ${booking.Car[0].car_make} ${booking.Car[0].car_model}`
@@ -148,7 +147,6 @@
                 viewButton.innerHTML = 'View';
                 viewButton.setAttribute('bookid', `${booking._id}`);
                 viewButton.addEventListener('click',async ()=>{
-                    console.log(booking);
                     let detailsWindow = window.open('','detailsWindow', 'width=800, height=650 resizable=0');
                     detailsWindow.document.write(`<head><link rel="stylesheet" href="styles.css"/></head>`);
                     detailsWindow.document.write(`<h4>Booked car licence plate is: ${booking.Car[0].licence_plate}. Your pickup code is:${booking.pickup_code}.<br> Your car pickup location:</h4>`);
