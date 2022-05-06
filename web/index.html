@@ -13,16 +13,13 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
-    <style>
-        #map {
-            height: 800px
-        }
-    </style>
 </head>
 
 <body>
     <span>Move the marker on the map to desired location to see nearby cars, click on the marker to see details, double-click to book.<br>
-        <a href="custbookings.html">Click here</a> to see your bookings.</span>
+        <a href="custbookings.html">Click here</a> to see your bookings.</span><br>
+    <div class="filters"> <label>Booking from:</label> <input type="date" id="filterFrom"/><label>Booking to: </label> <input type="date" id="filterTo"/>
+    </div>  <br>
     <div id="map"></div>
     <div id="userDetails" style="left: 30%; top:10%; visibility: hidden; position: absolute;">
         <label>Enter phone number:</label> <input type="text" id="phone" width="200"/>

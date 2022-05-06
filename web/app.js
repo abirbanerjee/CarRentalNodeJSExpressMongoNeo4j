@@ -5,7 +5,21 @@ let marker=[];
 // let carColorSelect = document.getElementById('color');
 // let carYearSelect = document.getElementById('year');
 
+var today = new Date();
+var todaysDate =today.getFullYear()+ '-'+(today.getMonth()+1).toString().padStart(2, '0')+'-'+(today.getDate()).toString().padStart(2, '0');
+document.querySelector('#filterFrom').value = todaysDate;
+document.querySelector('#filterTo').value = todaysDate;
 document.querySelector('#submitButton').addEventListener('click',fetchCustomer);
+let filterFrom = document.querySelector('#filterFrom').value;
+let filterTo = document.querySelector('#filterTo').value;
+document.querySelector('#filterFrom').addEventListener('change',()=>{
+    filterFrom = document.querySelector('#filterFrom').value;  
+})
+
+document.querySelector('#filterTo').addEventListener('change',()=>{
+    filterTo = document.querySelector('#filterTo').value;   
+})
+
 
 //setup leaflet
 let map = L.map('map').setView([0, 0], 2);
@@ -41,12 +55,14 @@ async function responseProcess(lat,lon) {
     const totCars = await resp.records;
     console.log(totCars);
     totCars.forEach(async (element, index) => {
-        const cd = await carDet(index);
+        const car_id = parseInt(element._fields[2]);
+        const cd = await carDet(car_id);
         lon = parseFloat(element._fields[0].x);
         lat = parseFloat(element._fields[0].y);  
-        if(cd.carDetails[0].status!=0){         
+        if(cd.carDetails[0].status!=0){  
+            const id = cd.carDetails[0].id;       
          marker = new L.Marker([lat, lon], {
-            _icon_id: index
+            _icon_id: id
         });
         marker.addTo(map);
         // marker.bindPopup(`car id ${marker.options._icon_id}`); //do not delete ---- understand marker options.
@@ -56,6 +72,7 @@ async function responseProcess(lat,lon) {
         marker.on('click', (e) => console.log(e.target));
         marker.on('dblclick', async (e) => {
             //Proceed with booking
+            document.querySelector('.filters').style.visibility='hidden';
             carLat = e.target._latlng.lat;
             carLon = e.target._latlng.lng;
             carID = e.target.options._icon_id;
@@ -69,7 +86,7 @@ async function responseProcess(lat,lon) {
     });
 }
 async function carDet(id) {
-    const data = { id };
+    const data = { id,filterFrom,filterTo };
     const options = {
         method: 'POST',
         headers: {
@@ -93,15 +110,18 @@ function userLoc() {
         lon = position.coords.longitude;
         map.flyTo([lat,lon],7, 'zoom');
         L.marker([lat, lon], { name:'home', icon: myIcon, draggable:true }).on('dragend',async (e)=>{
-        delMarkers();
-        //clearOptions();
-        responseProcess(e.target._latlng.lat, e.target._latlng.lng);
+        // delMarkers();
+        // responseProcess(e.target._latlng.lat, e.target._latlng.lng);
+        dragFunction(e);
     }).on('click', (e)=>console.log(e)).addTo(map).bindPopup('Your location');
         responseProcess(lat,lon);
     });
 }
 
-
+function dragFunction(e){
+    delMarkers();
+        responseProcess(e.target._latlng.lat, e.target._latlng.lng);
+}
 
 
 
@@ -155,11 +175,13 @@ async function fetchCustomer(){
     const carDets = await carDet(carID);
     selectedCar.innerHTML = `You selected the ${carDets.carDetails[0].color} ${carDets.carDetails[0].car_make} ${carDets.carDetails[0].car_model} (${carDets.carDetails[0].year}) 
     for €${carDets.carDetails[0].price}/day`;
-    document.querySelector('#to').addEventListener('change', ()=>{
-        bookedDays(carDets.carDetails[0].price);
-    })
+    bookedDays(carDets.carDetails[0].price);
     
     document.querySelector('#dates').style.visibility='visible';
+    document.querySelector('#from').value = filterFrom;
+    document.querySelector('#to').value = filterTo;
+    document.querySelector('#from').disabled = true;
+    document.querySelector('#to').disabled =true;
     document.querySelector('#submitBooking').addEventListener('click',async ()=>{
         document.querySelector('#submitBooking').disabled = true;
         const from = document.querySelector('#from').value;
@@ -203,7 +225,6 @@ async function custBookings(userPhone){
     };
     const resp = await fetch('/custbookings',options);
     const bookings = await resp.json();
-    // console.log(bookings);
     if(bookings.length!=0)
     {
         document.getElementById('prevBookings').style.visibility = 'visible';
@@ -238,8 +259,8 @@ async function custBookings(userPhone){
 }
 
 function bookedDays(pricePerDay){
-    let from = document.querySelector('#from').value;
-    let to = document.querySelector('#to').value;
+    let from = filterFrom;
+    let to = filterTo;
     let d1 = new Date(from);
     let d2 = new Date(to);
 

@@ -12,7 +12,7 @@ module.exports = {
         client.close();
         return locations;
     },
-    avlbl: async function availableCars(car_id){
+    avlbl: async function availableCars(car_id, from, to){
     const client = new MongoClient(mongoURI);
     await client.connect();
     filter={'id':car_id};
@@ -20,8 +20,21 @@ module.exports = {
     const carsColl = db.collection('cars');
     const bookingCollection = db.collection('bookings');
     const carDetails = await carsColl.find(filter).toArray();
-    client.close();
-    return carDetails;       
+    const car = carDetails[0]._id;
+    const carBooked = await bookingCollection.find({car_id:car}).toArray();
+    if(carBooked[0]!=null){
+      const bookFrom = new Date(carBooked[0].from);
+      const bookTo = new Date(carBooked[0].to);
+      const filterFrom = new Date(from);
+      const filterTo = new Date(to);
+      console.log(bookFrom,bookTo,filterFrom,filterTo);
+      if (filterFrom>=bookFrom && filterFrom<=bookTo)
+        carDetails.pop();
+        if(filterTo>=bookFrom && filterTo<=bookTo)
+        carDetails.pop();
+     }
+    return carDetails; 
+          
 },
 srchCust: async (phoneNo)=>{
     const client = new MongoClient(mongoURI);
@@ -59,7 +72,7 @@ newBooking: async (carId,custPhone, from, to, pickupCode)=>{
     const customer = (await custColl.findOne({$or: [{phone:custPhone},{email:custPhone}]}))._id;
     const bookingCollection = db.collection('bookings');
     await bookingCollection.insertOne({cust_id:customer, car_id:car, from:from, to:to, pickup_code:pickupCode});
-    await carsColl.updateOne({id:carId},{$set: {status:0}});
+    // await carsColl.updateOne({id:carId},{$set: {status:0}});
     client.close();
     
 },

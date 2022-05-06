@@ -21,17 +21,19 @@ app.post('/nodes',async (req,res)=>{
     console.log(lat,lon);
     const session = driver.session();
     const ses = await session.run(`MATCH (p:Car)
-    WITH point({longitude:toFloat(p.lon), latitude:toFloat(p.lat)}) as p1, point({longitude:toFloat(${lon}),latitude:toFloat(${lat})}) as p2
-    WITH p1,p2,point.distance(p1,p2)/1000 as d
+    WITH point({longitude:toFloat(p.lon), latitude:toFloat(p.lat)}) as p1, point({longitude:toFloat(${lon}),latitude:toFloat(${lat})}) as p2,p
+    WITH p,p1,p2,point.distance(p1,p2)/1000 as d
     WHERE d<50
-    return p1,d`);
+    return p1,d, p.car_id`);
     res.send(ses);
     await session.close();
 })
 
 app.post('/cardetails',async (req,res)=>{
     const car_id = req.body.id;
-    const carDetails = await MongoFunctions.avlbl(car_id);
+    const filterFrom = req.body.filterFrom;
+    const filterTo = req.body.filterTo;
+    const carDetails = await MongoFunctions.avlbl(car_id, filterFrom, filterTo);
     let data ={};
     data.carDetails = carDetails;
     res.send(data);
