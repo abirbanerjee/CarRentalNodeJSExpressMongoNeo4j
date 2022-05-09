@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Node data</title>
-    <link rel="stylesheet" href="styles.css"/>
+    <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
         crossorigin="" />
@@ -16,38 +16,41 @@
 </head>
 
 <body>
-    <span>Move the marker on the map to desired location to see nearby cars, click on the marker to see details, double-click to book.<br>
+    <span id="header">Move the marker on the map to desired location to see nearby cars, click on the marker to see
+        details, double-click to book.<br>
         <a href="custbookings.html">Click here</a> to see your bookings.</span><br>
-    <div class="filters"> <label>Booking from:</label> <input type="date" id="filterFrom"/><label>Booking to: </label> <input type="date" id="filterTo"/>
-    </div>  <br>
+    <div class="filters"> <label>Booking from:</label> <input type="date" id="filterFrom" /><label>Booking to: </label>
+        <input type="date" id="filterTo" />
+    </div> <br>
     <div id="map"></div>
     <div id="userDetails" style="left: 30%; top:10%; visibility: hidden; position: absolute;">
-        <label>Enter phone number:</label> <input type="text" id="phone" width="200"/>
+        <label>Enter phone number:</label> <input type="text" id="phone" width="200" />
         <button id="submitButton">GO</button>
         <h2 id="welcome"></h2>
         <h3 id="selectedCar"></h3>
         <div id="dates" style="visibility: hidden;">
-        <label>Booking from:</label>  <input type="date" id="from"/><br>
-        <label>Booking to:</label> <input type="date" id="to"/><br><br><br>
-        <span id ='totalPrice'></span>
-        <br><br>
-        <div id="proceedBooking" style="visibility: hidden;">
-        <span>Proceed with</span><button id="submitBooking">Booking?</button>
-        </div>
+            <label>Booking from:</label> <input type="date" id="from" /><br>
+            <label>Booking to:</label> <input type="date" id="to" /><br><br><br>
+            <span id='totalPrice'></span>
+            <br><br>
+            <div id="proceedBooking" style="visibility: hidden;">
+                <span>Proceed with </span><button id="submitBooking">Booking?</button>
+            </div>
         </div>
         <div id="newcustomer" style="visibility: hidden;">
             <h4>This is your first booking, please enter your details: </h4>
             <label>Enter first name:</label><input type="text" width="200" id="fname"><br>
             <label>Enter last name:</label><input type="text" width="200" id="lname"><br>
-            <label>Enter email id(optional):</label> <input type="text" width="200" id="email"><br><br> 
+            <label>Enter email id(optional):</label> <input type="text" width="200" id="email"><br><br>
             <button id="newUserSub">Submit</button>
         </div>
+        <h4 id="yourBooking" style="visibility: hidden;">Your bookings:</h4>
         <div id="prevBookings" style="visibility: hidden;">
-            <h4>Your bookings:</h4>
+
         </div>
     </div>
-    
-    <script src = "app.js"></script>
+
+    <script src="app.js"></script>
 </body>
 
 </html>

@@ -1,63 +1,70 @@
-button{
+button {
     background-color: azure;
     border-radius: .5;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
-input{
+
+input {
     border-radius: .5%;
     font-family: monospace;
     font-size: large;
 }
 
-body{
+body {
     font-family: monospace;
     font-size: x-large;
 }
 
-h4{
+h4 {
     text-decoration: underline;
 }
 
-body{
+body {
     background-color: rgba(189, 236, 217, 0.836);
 }
 
-table, th, td {
+table,
+th,
+td {
     border: 1px solid black;
 }
 
-label{
+label {
     display: block;
     float: left;
     clear: left;
     width: 250px;
     text-align: right;
 }
+
 input {
-  display: block;
-  float: left;
+    display: block;
+    float: left;
 }
 
-div button{
+div button {
     display: inline;
     float: none;
 }
 
-.filters{
+.filters {
     position: absolute;
-    top:50px;
+    top: 50px;
     left: 280px;
     z-index: 5;
 }
-.filters label{
-    display: block;
-    float:inline-end;
-}
-.filters input{
+
+.filters label {
     display: block;
     float: inline-end;
 }
-#map{
+
+.filters input {
+    display: block;
+    float: inline-end;
+}
+
+#map {
     z-index: 2;
     position: relative;
     margin-left: 0;
