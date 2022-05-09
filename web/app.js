@@ -64,7 +64,7 @@ async function responseProcess(lat, lon) {
             // marker.bindPopup(`car id ${marker.options._icon_id}`); //do not delete ---- understand marker options.
             marker.bindPopup
                 (`${cd.carDetails[0].color} ${cd.carDetails[0].car_make} ${cd.carDetails[0].car_model}<br> 
-        Rent/day:€${cd.carDetails[0].price}<br>Distance: ${parseFloat(element._fields[1].toFixed(2))} KMs<br><img src=${cd.carDetails[0].photo}/>`)
+        Rent/day:€${cd.carDetails[0].price}<br>Distance: ${parseFloat(element._fields[1].toFixed(2))} KMs<br><img src=${cd.carDetails[0].photo}>`)
             marker.on('click', (e) => console.log(e.target));
             marker.on('dblclick', async (e) => {
                 //Proceed with booking
@@ -163,7 +163,7 @@ async function fetchCustomer() {
         selectedCar.innerHTML = `You selected the ${carDets.carDetails[0].color} ${carDets.carDetails[0].car_make} ${carDets.carDetails[0].car_model} (${carDets.carDetails[0].year}) 
     for €${carDets.carDetails[0].price}/day`;
         bookedDays(carDets.carDetails[0].price);
-
+        document.querySelector('#carImage').src=carDets.carDetails[0].photo;
         document.querySelector('#dates').style.visibility = 'visible';
         document.querySelector('#from').value = filterFrom;
         document.querySelector('#to').value = filterTo;
