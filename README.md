@@ -1,7 +1,7 @@
-#Car Rental system using MongoDB and Neo4j.
-###This is a simple car rental system built with node.js using MongoDB and Neo4j as the databases. It uses Neo4j's geoloaction function to calculate the distance between two nodes to calculate the distance between the cars and the user and shows the nearby cars.
+# Car Rental system using MongoDB and Neo4j.
+### This is a simple car rental system built with node.js using MongoDB and Neo4j as the databases. It uses Neo4j's geoloaction function to calculate the distance between two nodes to calculate the distance between the cars and the user and shows the nearby cars.
 
-#Installation
+# Installation
 -Install MongoDB compass
 -Install Neo4j Desktop (Or use Neo4j web)
 -Use the following command in cypher to import car locations into Neo4j 
