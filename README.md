@@ -18,3 +18,5 @@ npm run test
 ```
 
 - Open your browser and go to (localhost:3000)
+
+![Home Screen](https://ibb.co/NsnBjh3)
