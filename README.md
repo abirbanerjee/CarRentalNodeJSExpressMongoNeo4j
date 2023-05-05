@@ -14,7 +14,7 @@ CREATE (C:Car {car_id:ROW.car_id, lat:ROW.lat, lon:ROW.long})
 - Copy or download this repository and do 
 ```
 npm install
-npm run test
+npm test OR node index.js
 ```
 
 - Open your browser and go to (localhost:3000)
